@@ -10,10 +10,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val colorData = Color.make(mutableListOf()).fillList()
+        // 미션을 위해 잠시 주석 처리
+        /*val colorData = Color.make(mutableListOf()).fillList()
         val myRV = findViewById<RecyclerView>(R.id.recycler_view)
         val myAdapter = MyAdapter(colorData)
-        myRV.adapter = myAdapter
+        myRV.adapter = myAdapter*/
 
     }
 }
