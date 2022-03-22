@@ -13,106 +13,28 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
-
-    private lateinit var imageLoadingButton: Button
-    private val permissionLauncher = requestPermissionLauncher()
-    private val permissionLauncherForSecond = requestPermissionLauncherSecond()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val permissionBtn = findViewById<Button>(R.id.permission_btn)
+        permissionBtn.setOnClickListener {
+            val intent = Intent(this, PermissionActivity::class.java)
+            startActivity(intent)
+        }
 
-//        val test = requestPermissionLauncher()
         // 미션을 위해 잠시 주석 처리
-        /*val colorData = Color.make(mutableListOf()).fillList()
+        val colorData = Color.make(mutableListOf()).fillList()
         val myRV = findViewById<RecyclerView>(R.id.recycler_view)
         val myAdapter = MyAdapter(colorData)
-        myRV.adapter = myAdapter*/
-
-        imageLoadingButton = findViewById(R.id.album_btn)
-        imageLoadingButton.setOnClickListener {
-            loadImageFromContent()
-        }
+        myRV.adapter = myAdapter
 
     }
 
-    private fun requestPermissionLauncher() =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                val loadImage = Intent(Intent.ACTION_GET_CONTENT).apply {
-                    this.type = "image/*"
-                }
-                startActivity(loadImage)
-            } else {
-                Snackbar.make(imageLoadingButton, "request denied", Snackbar.LENGTH_LONG).show()
-            }
-        }
 
-    private fun requestPermissionLauncherSecond() =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                val loadImage = Intent(Intent.ACTION_GET_CONTENT).apply {
-                    this.type = "image/*"
-                }
-                startActivity(loadImage)
-            } else {
-                imageLoadingButton.showSnackbar(
-                    "이미지를 불러오기 위해 권한을 승인하시기 바랍니다",
-                    Snackbar.LENGTH_SHORT,
-                    "설정창으로 가기"
-                ) {
-                    val settingIntent = Intent().apply {
-                        this.action = ACTION_APPLICATION_DETAILS_SETTINGS
-                        this.data = Uri.fromParts("package", packageName, null)
-                    }
-                    startActivity(settingIntent)
-                }
-            }
-        }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun loadImageFromContent() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_MEDIA_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            Snackbar.make(imageLoadingButton, "permission Granted", Snackbar.LENGTH_LONG).show()
-            permissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
-        } else {
-            requestMediaPermission()
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun requestMediaPermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_MEDIA_LOCATION)) {
-            permissionLauncherForSecond.launch("android.permission.ACCESS_MEDIA_LOCATION")
-        } else {
-            permissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
-        }
-    }
-
-}
-
-fun View.showSnackbar(
-    msg: String,
-    length: Int,
-    actionMessage: CharSequence?,
-    action: (View) -> Unit
-) {
-    val snackbar = Snackbar.make(this, msg, length)
-    if (actionMessage != null) {
-        snackbar.setAction(actionMessage) {
-            action(this)
-        }.show()
-    }
 }
