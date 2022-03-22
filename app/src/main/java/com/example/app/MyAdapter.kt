@@ -7,7 +7,8 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter(private val data: List<String>) : RecyclerView.Adapter<MyAdapter.RectangleViewHolder>() {
+class MyAdapter(private val data: List<String>) :
+    RecyclerView.Adapter<MyAdapter.RectangleViewHolder>() {
 
     class RectangleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.item_view)
@@ -27,4 +28,5 @@ class MyAdapter(private val data: List<String>) : RecyclerView.Adapter<MyAdapter
     override fun getItemCount(): Int {
         return data.size
     }
+
 }
