@@ -7,24 +7,26 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
-class MyAdapter : RecyclerView.Adapter<MyAdapter.ViewHolder>() {
+class MyAdapter(private val data: List<String>) :
+    RecyclerView.Adapter<MyAdapter.RectangleViewHolder>() {
 
-    class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class RectangleViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.item_view)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RectangleViewHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.recycler_view_item, parent, false)
 
-        return ViewHolder(view)
+        return RectangleViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.imageView.setBackgroundColor(Color.BLACK)
+    override fun onBindViewHolder(holder: RectangleViewHolder, position: Int) {
+        holder.imageView.setBackgroundColor(Color.parseColor(data[position]))
     }
 
     override fun getItemCount(): Int {
-        return 40
+        return data.size
     }
+
 }
