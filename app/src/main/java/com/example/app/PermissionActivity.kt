@@ -59,7 +59,7 @@ class PermissionActivity : AppCompatActivity() {
                 imageLoadingButton.showSnackbar(
                     "이미지를 불러오기 위해 권한을 승인하시기 바랍니다",
                     Snackbar.LENGTH_SHORT,
-                    "설정창으로 가기"
+                    "설정창"
                 ) {
                     val settingIntent = Intent().apply {
                         this.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
@@ -78,7 +78,7 @@ class PermissionActivity : AppCompatActivity() {
             ) == PackageManager.PERMISSION_GRANTED
         ) {
             Snackbar.make(imageLoadingButton, "permission Granted", Snackbar.LENGTH_LONG).show()
-            permissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
+            permissionLauncher.launch("android.permission.READ_EXTERNAL_STORAGE")
         } else {
             requestMediaPermission()
         }
@@ -86,10 +86,10 @@ class PermissionActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.M)
     private fun requestMediaPermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_MEDIA_LOCATION)) {
-            permissionLauncherForSecond.launch("android.permission.ACCESS_MEDIA_LOCATION")
+        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
+            permissionLauncherForSecond.launch("android.permission.READ_EXTERNAL_STORAGE")
         } else {
-            permissionLauncher.launch("android.permission.ACCESS_MEDIA_LOCATION")
+            permissionLauncher.launch("android.permission.READ_EXTERNAL_STORAGE")
         }
     }
 

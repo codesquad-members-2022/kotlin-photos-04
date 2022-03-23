@@ -1,8 +1,12 @@
 package com.example.app
 
+import android.content.ContentUris
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.MediaStore
+import android.util.Log
 
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -14,9 +18,30 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setAppbar()
 
-        val colorData = Color.make(mutableListOf()).fillList()
         val myRV = findViewById<RecyclerView>(R.id.recycler_view)
-        val myAdapter = MyAdapter(colorData)
+
+        val imageList = mutableListOf<Image>()
+        val projection = arrayOf( MediaStore.Images.Media._ID)
+
+        applicationContext.contentResolver.query(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            projection,
+            null,
+           null,
+            null
+        )?.use { cursor ->
+            val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
+            while (cursor.moveToNext()) {
+                val id = cursor.getLong(idColumn)
+                val contentUri: Uri = ContentUris.withAppendedId(
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                    id
+                )
+                imageList += Image(id, contentUri)
+            }
+        }
+
+        val myAdapter = ImageAdapter(imageList)
         myRV.adapter = myAdapter
 
     }
@@ -33,5 +58,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
 }
+
+data class Image(val id: Long, val uri: Uri)
