@@ -1,4 +1,4 @@
-package com.example.app
+package com.example.app.view
 
 import android.content.ContentUris
 import android.content.Intent
@@ -8,24 +8,53 @@ import android.os.Bundle
 import android.provider.MediaStore
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app.ImageAdapter
+import com.example.app.R
+import com.example.app.data.JsonImage
 import com.google.android.material.appbar.MaterialToolbar
+import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setAppbar()
+//        setAppbar()
 
-        val imageList = mutableListOf<Image>()
+        val jsonImageList: MutableList<JsonImage> = mutableListOf()
+
+        val assetLoader = AssetLoader()
+        val imageData = assetLoader.getJsonString(this, "Image.json")
+
+        if (!imageData.isNullOrEmpty()) {
+            val jsonObject = JSONObject(imageData)
+            val jsonList = jsonObject.getJSONArray("DownloadedImage")
+
+            for (i in 0 until jsonList.length()) {
+                val imageObject = jsonList.getJSONObject(i)
+                jsonImageList.add(
+                    JsonImage(
+                        imageObject.getString("title"),
+                        imageObject.getString("image"),
+                        imageObject.getString("date")
+
+                    )
+                )
+                println(imageObject)
+            }
+        }
+
+        val imageList = mutableListOf<JsonImage>()
         val myRV = findViewById<RecyclerView>(R.id.recycler_view)
         val myAdapter = ImageAdapter(imageList)
         myRV.adapter = myAdapter
 
-        loadImageUri(imageList)
+//        loadImageUri(imageList)
+
+
     }
 
-    private fun loadImageUri(imageList: MutableList<Image>) {
+    private fun loadImageUri(imageList: MutableList<JsonImage>) {
         val projection = arrayOf(MediaStore.Images.Media._ID)
         applicationContext.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -41,7 +70,7 @@ class MainActivity : AppCompatActivity() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     id
                 )
-                imageList += Image(id, contentUri)
+//                imageList += JsonImage(id, contentUri)
             }
         }
     }
