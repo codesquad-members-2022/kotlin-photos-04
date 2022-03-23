@@ -1,4 +1,4 @@
-package com.example.app
+package com.example.app.view
 
 import android.Manifest
 import android.content.Intent
@@ -13,6 +13,7 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import com.example.app.R
 import com.google.android.material.snackbar.Snackbar
 
 class PermissionActivity : AppCompatActivity() {

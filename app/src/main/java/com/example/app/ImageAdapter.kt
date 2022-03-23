@@ -1,15 +1,23 @@
 package com.example.app
 
+import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.ImageDecoder
+import android.net.Uri
+import android.provider.ContactsContract.CommonDataKinds.Website.URL
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.app.data.JsonImage
+import java.net.URL
 
-class ImageAdapter(private val imageData: List<Image>) :
-    ListAdapter<Image, ImageAdapter.ImageViewHolder>(ImageDiffCallback) {
+class ImageAdapter(private val jsonImageData: List<JsonImage>) :
+    ListAdapter<JsonImage, ImageAdapter.ImageViewHolder>(ImageDiffCallback) {
 
     class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.item_view)
@@ -23,22 +31,28 @@ class ImageAdapter(private val imageData: List<Image>) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.imageView.setImageURI(imageData[position].uri)
+        val url = URL("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4XFa0i2H58farLmNpuChYmuADmvu3_dgE6aetcAmxhPAacH-32w")
+        val urlConnection = url.openConnection()
+        urlConnection.connect()
+        val stream = urlConnection.getInputStream()
+        val bitmap = BitmapFactory.decodeStream(stream)
+
+        holder.imageView.setImageBitmap(bitmap)
     }
 
     override fun getItemCount(): Int {
-        println(imageData.size)
-        return imageData.size
+        println(jsonImageData.size)
+        return 1
     }
 
 }
 
-object ImageDiffCallback : DiffUtil.ItemCallback<Image>() {
-    override fun areItemsTheSame(oldItem: Image, newItem: Image): Boolean {
+object ImageDiffCallback : DiffUtil.ItemCallback<JsonImage>() {
+    override fun areItemsTheSame(oldItem: JsonImage, newItem: JsonImage): Boolean {
         return oldItem.id == newItem.id
     }
 
-    override fun areContentsTheSame(oldItem: Image, newItem: Image): Boolean {
+    override fun areContentsTheSame(oldItem: JsonImage, newItem: JsonImage): Boolean {
         return oldItem == newItem
     }
 }
