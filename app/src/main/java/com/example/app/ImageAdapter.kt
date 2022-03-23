@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 
-class ImageAdapter(private val data: List<Image>) :
+class ImageAdapter(private val imageData: List<Image>) :
     ListAdapter<Image, ImageAdapter.ImageViewHolder>(ImageDiffCallback) {
 
     class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -23,12 +23,12 @@ class ImageAdapter(private val data: List<Image>) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.imageView.setImageURI(data[position].uri)
+        holder.imageView.setImageURI(imageData[position].uri)
     }
 
     override fun getItemCount(): Int {
-        println(data.size)
-        return data.size
+        println(imageData.size)
+        return imageData.size
     }
 
 }

@@ -6,7 +6,6 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.appbar.MaterialToolbar
@@ -18,16 +17,21 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setAppbar()
 
-        val myRV = findViewById<RecyclerView>(R.id.recycler_view)
-
         val imageList = mutableListOf<Image>()
-        val projection = arrayOf( MediaStore.Images.Media._ID)
+        val myRV = findViewById<RecyclerView>(R.id.recycler_view)
+        val myAdapter = ImageAdapter(imageList)
+        myRV.adapter = myAdapter
 
+        loadImageUri(imageList)
+    }
+
+    private fun loadImageUri(imageList: MutableList<Image>) {
+        val projection = arrayOf(MediaStore.Images.Media._ID)
         applicationContext.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
             projection,
             null,
-           null,
+            null,
             null
         )?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(MediaStore.Images.Media._ID)
@@ -40,10 +44,6 @@ class MainActivity : AppCompatActivity() {
                 imageList += Image(id, contentUri)
             }
         }
-
-        val myAdapter = ImageAdapter(imageList)
-        myRV.adapter = myAdapter
-
     }
 
     private fun setAppbar() {
@@ -60,4 +60,4 @@ class MainActivity : AppCompatActivity() {
 
 }
 
-data class Image(val id: Long, val uri: Uri)
+
