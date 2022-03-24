@@ -1,15 +1,11 @@
 package com.example.app
 
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -31,13 +27,15 @@ class ImageAdapter(private val jsonImageData: List<JsonImage>) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val url = URL("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4XFa0i2H58farLmNpuChYmuADmvu3_dgE6aetcAmxhPAacH-32w")
+/*        val url = URL("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4XFa0i2H58farLmNpuChYmuADmvu3_dgE6aetcAmxhPAacH-32w")
         val urlConnection = url.openConnection()
+        urlConnection.doInput = true
         urlConnection.connect()
-        val stream = urlConnection.getInputStream()
-        val bitmap = BitmapFactory.decodeStream(stream)
+        val inputStream = urlConnection.getInputStream()
+        Log.d("Adapter", "url")
+        val bitmap = BitmapFactory.decodeStream(inputStream)*/
 
-        holder.imageView.setImageBitmap(bitmap)
+/*        holder.imageView.setImageBitmap(bitmap)*/
     }
 
     override fun getItemCount(): Int {
