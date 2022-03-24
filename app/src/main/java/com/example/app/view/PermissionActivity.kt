@@ -30,12 +30,13 @@ class PermissionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission)
+        val permissionLayout: ConstraintLayout = findViewById(R.id.permission_layout)
 
         if (haveMediaPermission()) {
             goToMainActivity()
+        } else {
+            permissionLayout.visibility = View.VISIBLE
         }
-        val permissionLayout: ConstraintLayout = findViewById(R.id.permission_layout)
-        permissionLayout.visibility = View.VISIBLE
 
         imageLoadingButton = findViewById(R.id.album_btn)
         imageLoadingButton.setOnClickListener {
