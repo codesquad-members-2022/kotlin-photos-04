@@ -3,6 +3,7 @@
     package="com.example.app">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +16,7 @@
             android:name=".view.DoodleActivity"
             android:exported="false" />
         <activity
-            android:name=".PermissionActivity"
+            android:name=".view.PermissionActivity"
             android:exported="false" />
         <activity
             android:name=".view.MainActivity"

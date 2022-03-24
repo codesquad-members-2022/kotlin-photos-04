@@ -10,19 +10,30 @@ import android.provider.MediaStore
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app.ImageAdapter
 import com.example.app.R
+import com.example.app.data.Image
 import com.example.app.data.JsonImage
 import com.google.android.material.appbar.MaterialToolbar
 import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
+    private val mediaStoreImageList = mutableListOf<Image>()
+
+    private val jsonImageList = mutableListOf<JsonImage>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-//        setAppbar()
+        setAppbar()
+        loadImageUri()
+        extractImageFromJson()
 
-        val jsonImageList: MutableList<JsonImage> = mutableListOf()
+        val myRV = findViewById<RecyclerView>(R.id.recycler_view)
+        val myAdapter = ImageAdapter(jsonImageList)
+        myRV.adapter = myAdapter
+    }
 
+    private fun extractImageFromJson() {
         val assetLoader = AssetLoader()
         val imageData = assetLoader.getJsonString(this, "Image.json")
 
@@ -40,21 +51,11 @@ class MainActivity : AppCompatActivity() {
 
                     )
                 )
-                println(imageObject)
             }
         }
-
-        val imageList = mutableListOf<JsonImage>()
-        val myRV = findViewById<RecyclerView>(R.id.recycler_view)
-        val myAdapter = ImageAdapter(imageList)
-        myRV.adapter = myAdapter
-
-//        loadImageUri(imageList)
-
-
     }
 
-    private fun loadImageUri(imageList: MutableList<JsonImage>) {
+    private fun loadImageUri() {
         val projection = arrayOf(MediaStore.Images.Media._ID)
         applicationContext.contentResolver.query(
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
@@ -70,7 +71,7 @@ class MainActivity : AppCompatActivity() {
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
                     id
                 )
-//                imageList += JsonImage(id, contentUri)
+                mediaStoreImageList += Image(id, contentUri)
             }
         }
     }
