@@ -26,34 +26,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setAppbar()
         loadImageUri()
-        extractImageFromJson()
 
         val myRV = findViewById<RecyclerView>(R.id.recycler_view)
         val myAdapter = ImageAdapter(jsonImageList)
         myRV.adapter = myAdapter
     }
 
-    private fun extractImageFromJson() {
-        val assetLoader = AssetLoader()
-        val imageData = assetLoader.getJsonString(this, "Image.json")
-
-        if (!imageData.isNullOrEmpty()) {
-            val jsonObject = JSONObject(imageData)
-            val jsonList = jsonObject.getJSONArray("DownloadedImage")
-
-            for (i in 0 until jsonList.length()) {
-                val imageObject = jsonList.getJSONObject(i)
-                jsonImageList.add(
-                    JsonImage(
-                        imageObject.getString("title"),
-                        imageObject.getString("image"),
-                        imageObject.getString("date")
-
-                    )
-                )
-            }
-        }
-    }
 
     private fun loadImageUri() {
         val projection = arrayOf(MediaStore.Images.Media._ID)
@@ -80,7 +58,7 @@ class MainActivity : AppCompatActivity() {
         val appBar = findViewById<MaterialToolbar>(R.id.appbar)
         appBar.setOnMenuItemClickListener {
             if (it.itemId == R.id.ic_permission) {
-                val intent = Intent(this, PermissionActivity::class.java)
+                val intent = Intent(this, DoodleActivity::class.java)
                 startActivity(intent)
                 return@setOnMenuItemClickListener true
             }

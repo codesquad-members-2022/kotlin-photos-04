@@ -2,15 +2,11 @@ package com.example.app
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -34,20 +30,7 @@ class ImageAdapter(private val jsonImageData: List<JsonImage>) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val url =
-            URL(jsonImageData[position].uri)
-        var bitmapImage: Bitmap? = null
-        val thread = Thread {
-            val urlConnection = url.openConnection() as HttpURLConnection
-            urlConnection.doInput = true
-            urlConnection.connect()
-            val inputStream = urlConnection.inputStream
-            bitmapImage = BitmapFactory.decodeStream(inputStream)
-        }
-        thread.start()
-        thread.join()
-        holder.imageView.setImageBitmap(bitmapImage)
-
+        holder.imageView.setImageBitmap(jsonImageData[position].image)
     }
 
     override fun getItemCount(): Int {
