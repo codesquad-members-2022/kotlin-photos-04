@@ -1,20 +1,19 @@
 package com.example.app
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.ImageDecoder
-import android.net.Uri
-import android.provider.ContactsContract.CommonDataKinds.Website.URL
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.core.net.toUri
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app.data.JsonImage
+import java.net.HttpURLConnection
 import java.net.URL
+import javax.net.ssl.HttpsURLConnection
 
 class ImageAdapter(private val jsonImageData: List<JsonImage>) :
     ListAdapter<JsonImage, ImageAdapter.ImageViewHolder>(ImageDiffCallback) {
@@ -31,20 +30,12 @@ class ImageAdapter(private val jsonImageData: List<JsonImage>) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val url = URL("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4XFa0i2H58farLmNpuChYmuADmvu3_dgE6aetcAmxhPAacH-32w")
-        val urlConnection = url.openConnection()
-        urlConnection.connect()
-        val stream = urlConnection.getInputStream()
-        val bitmap = BitmapFactory.decodeStream(stream)
-
-        holder.imageView.setImageBitmap(bitmap)
+        holder.imageView.setImageBitmap(jsonImageData[position].image)
     }
 
     override fun getItemCount(): Int {
-        println(jsonImageData.size)
-        return 1
+        return jsonImageData.size
     }
-
 }
 
 object ImageDiffCallback : DiffUtil.ItemCallback<JsonImage>() {

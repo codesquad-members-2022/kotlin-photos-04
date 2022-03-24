@@ -1,5 +1,5 @@
 package com.example.app.data
 
-import android.net.Uri
+import android.graphics.Bitmap
 
-data class JsonImage(val id: String, val uri: String, val date:String)
+data class JsonImage(val id: String, val image: Bitmap?, val date:String)
