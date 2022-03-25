@@ -1,13 +1,22 @@
-package com.example.app
+package com.example.app.viewmodel
 
+import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.app.data.JsonImage
+import com.example.app.view.DoodleAdapter
 import kotlinx.coroutines.*
 import org.json.JSONObject
 import java.net.URL
 
-class DoodleImageDownloader {
+class DoodleViewModel(application: Application) : AndroidViewModel(application) {
+
+    val jsonImageList: MutableLiveData<JsonImage> by lazy {
+        MutableLiveData<JsonImage>()
+    }
 
     private fun loadImage(uri: String): Bitmap? {
         val url = URL(uri)
