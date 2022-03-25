@@ -8,10 +8,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app.R
-import com.example.app.data.JsonImage
+import com.example.app.data.GalleryImage
 
-class ImageAdapter(private val jsonImageData: List<JsonImage>) :
-    ListAdapter<JsonImage, ImageAdapter.ImageViewHolder>(ImageDiffCallback) {
+class GalleryAdapter(private val imageData: List<GalleryImage>) :
+    ListAdapter<GalleryImage, GalleryAdapter.ImageViewHolder>(ImageDiffCallback) {
 
     class ImageViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         val imageView: ImageView = view.findViewById(R.id.item_view)
@@ -25,20 +25,20 @@ class ImageAdapter(private val jsonImageData: List<JsonImage>) :
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        holder.imageView.setImageBitmap(jsonImageData[position].image)
+        holder.imageView.setImageURI(imageData[position].uri)
     }
 
     override fun getItemCount(): Int {
-        return jsonImageData.size
-    }
-}
-
-object ImageDiffCallback : DiffUtil.ItemCallback<JsonImage>() {
-    override fun areItemsTheSame(oldItem: JsonImage, newItem: JsonImage): Boolean {
-        return oldItem.id == newItem.id
+        return imageData.size
     }
 
-    override fun areContentsTheSame(oldItem: JsonImage, newItem: JsonImage): Boolean {
-        return oldItem == newItem
+    companion object ImageDiffCallback : DiffUtil.ItemCallback<GalleryImage>() {
+        override fun areItemsTheSame(oldItem: GalleryImage, newItem: GalleryImage): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: GalleryImage, newItem: GalleryImage): Boolean {
+            return oldItem == newItem
+        }
     }
 }

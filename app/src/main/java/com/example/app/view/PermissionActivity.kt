@@ -10,11 +10,9 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import com.example.app.R
 import com.google.android.material.snackbar.Snackbar
@@ -68,7 +66,7 @@ class PermissionActivity : AppCompatActivity() {
         }
 
     private fun goToMainActivity() {
-        val loadImage = Intent(this, MainActivity::class.java)
+        val loadImage = Intent(this, GalleryActivity::class.java)
         startActivity(loadImage)
     }
 

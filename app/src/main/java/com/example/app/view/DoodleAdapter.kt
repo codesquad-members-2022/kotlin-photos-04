@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.app.R
@@ -12,7 +13,7 @@ import com.example.app.databinding.DoodleViewItemBinding
 import kotlinx.coroutines.*
 
 class DoodleAdapter :
-    ListAdapter<JsonImage, DoodleAdapter.DoodleAdapterViewHolder>(ImageDiffCallback) {
+    ListAdapter<JsonImage, DoodleAdapter.DoodleAdapterViewHolder>(JsonImageDiffCallback) {
 
     inner class DoodleAdapterViewHolder(private val doodleBinding: DoodleViewItemBinding) :
         RecyclerView.ViewHolder(doodleBinding.root) {
@@ -40,4 +41,13 @@ class DoodleAdapter :
         }
     }
 
+    companion object JsonImageDiffCallback : DiffUtil.ItemCallback<JsonImage>() {
+        override fun areItemsTheSame(oldItem: JsonImage, newItem: JsonImage): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: JsonImage, newItem: JsonImage): Boolean {
+            return oldItem == newItem
+        }
+    }
 }

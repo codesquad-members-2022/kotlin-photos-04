@@ -4,11 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="doodle"
             type="com.example.app.data.JsonImage" />
-
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
