@@ -1,6 +1,7 @@
-package com.example.app.view
+package com.example.app.data
 
 import android.content.Context
+import com.example.app.viewmodel.DoodleViewModel
 
 class AssetLoader {
 
@@ -18,4 +19,5 @@ class AssetLoader {
             String(bytes)
         }
     }
+
 }

@@ -6,14 +6,11 @@ import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.provider.MediaStore
-
 import androidx.recyclerview.widget.RecyclerView
-import com.example.app.ImageAdapter
 import com.example.app.R
 import com.example.app.data.Image
 import com.example.app.data.JsonImage
 import com.google.android.material.appbar.MaterialToolbar
-import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
