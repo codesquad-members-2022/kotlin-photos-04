@@ -1,6 +1,5 @@
 package com.example.app.view
 
-import android.graphics.Bitmap
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.GridLayoutManager
@@ -9,7 +8,6 @@ import com.example.app.DoodleAdapter
 import com.example.app.DoodleImageDownloader
 import com.example.app.R
 import com.example.app.data.JsonImage
-import org.json.JSONObject
 
 class DoodleActivity : AppCompatActivity() {
 
@@ -29,7 +27,7 @@ class DoodleActivity : AppCompatActivity() {
 
     private fun extractDataFromJson(adapter: DoodleAdapter) {
         val assetLoader = AssetLoader()
-        val imageData = assetLoader.getJsonString(this, "Image.json")
+        val imageData = assetLoader.getJsonString(this, "Image.json") ?: ""
         val doodleImageDownloader = DoodleImageDownloader()
         doodleImageDownloader.getDownloadedImages(jsonImageList, imageData, adapter)
     }

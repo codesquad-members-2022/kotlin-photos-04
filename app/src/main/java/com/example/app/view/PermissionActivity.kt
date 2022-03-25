@@ -10,8 +10,11 @@ import android.os.Bundle
 import android.provider.Settings
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.constraintlayout.widget.ConstraintSet
 import androidx.core.content.ContextCompat
 import com.example.app.R
 import com.google.android.material.snackbar.Snackbar
@@ -19,17 +22,25 @@ import com.google.android.material.snackbar.Snackbar
 class PermissionActivity : AppCompatActivity() {
 
     private lateinit var imageLoadingButton: Button
+
+    @RequiresApi(Build.VERSION_CODES.M)
     private val permissionLauncher = requestPermissionLauncher()
-    private val permissionLauncherForSecond = requestPermissionLauncherSecond()
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_permission)
+        val permissionLayout: ConstraintLayout = findViewById(R.id.permission_layout)
+
+        if (haveMediaPermission()) {
+            goToMainActivity()
+        } else {
+            permissionLayout.visibility = View.VISIBLE
+        }
 
         imageLoadingButton = findViewById(R.id.album_btn)
         imageLoadingButton.setOnClickListener {
-            loadImageFromContent()
+            permissionLauncher.launch("android.permission.READ_EXTERNAL_STORAGE")
         }
     }
 
@@ -37,75 +48,41 @@ class PermissionActivity : AppCompatActivity() {
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
-            if (isGranted) {
-                val loadImage = Intent(Intent.ACTION_GET_CONTENT).apply {
-                    this.type = "image/*"
-                }
-                startActivity(loadImage)
-            } else {
-                Snackbar.make(imageLoadingButton, "request denied", Snackbar.LENGTH_LONG).show()
-            }
-        }
-
-    private fun requestPermissionLauncherSecond() =
-        registerForActivityResult(
-            ActivityResultContracts.RequestPermission()
-        ) { isGranted: Boolean ->
-            if (isGranted) {
-                val loadImage = Intent(Intent.ACTION_GET_CONTENT).apply {
-                    this.type = "image/*"
-                }
-                startActivity(loadImage)
-            } else {
-                imageLoadingButton.showSnackbar(
-                    "이미지를 불러오기 위해 권한을 승인하시기 바랍니다",
-                    Snackbar.LENGTH_SHORT,
-                    "설정창"
-                ) {
-                    val settingIntent = Intent().apply {
-                        this.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
-                        this.data = Uri.fromParts("package", packageName, null)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                when {
+                    isGranted -> {
+                        goToMainActivity()
                     }
-                    startActivity(settingIntent)
+                    shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                        Snackbar.make(
+                            imageLoadingButton,
+                            "앱을 실행하기 위해서는 권한을 승인하시기 바랍니다.",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+                    else -> {
+                        goToSettings()
+                    }
                 }
             }
         }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun loadImageFromContent() {
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_MEDIA_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED
-        ) {
-            Snackbar.make(imageLoadingButton, "permission Granted", Snackbar.LENGTH_LONG).show()
-            permissionLauncher.launch("android.permission.READ_EXTERNAL_STORAGE")
-        } else {
-            requestMediaPermission()
+    private fun goToMainActivity() {
+        val loadImage = Intent(this, MainActivity::class.java)
+        startActivity(loadImage)
+    }
+
+    private fun haveMediaPermission() = ContextCompat.checkSelfPermission(
+        this,
+        Manifest.permission.READ_EXTERNAL_STORAGE
+    ) == PackageManager.PERMISSION_GRANTED
+
+    private fun goToSettings() {
+        val settingIntent = Intent().apply {
+            this.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            this.data = Uri.fromParts("package", packageName, null)
         }
+        startActivity(settingIntent)
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    private fun requestMediaPermission() {
-        if (shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
-            permissionLauncherForSecond.launch("android.permission.READ_EXTERNAL_STORAGE")
-        } else {
-            permissionLauncher.launch("android.permission.READ_EXTERNAL_STORAGE")
-        }
-    }
-
-}
-
-fun View.showSnackbar(
-    msg: String,
-    length: Int,
-    actionMessage: CharSequence?,
-    action: (View) -> Unit
-) {
-    val snackbar = Snackbar.make(this, msg, length)
-    if (actionMessage != null) {
-        snackbar.setAction(actionMessage) {
-            action(this)
-        }.show()
-    }
 }

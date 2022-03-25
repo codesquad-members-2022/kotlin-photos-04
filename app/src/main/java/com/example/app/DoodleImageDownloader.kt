@@ -5,36 +5,34 @@ import android.graphics.BitmapFactory
 import com.example.app.data.JsonImage
 import kotlinx.coroutines.*
 import org.json.JSONObject
-
 import java.net.URL
-
 
 class DoodleImageDownloader {
 
-    private suspend fun loadImage(uri: String): Bitmap? {
+    private fun loadImage(uri: String): Bitmap? {
         val url = URL(uri)
-        var bitmap: Bitmap? = null
-        withContext(Dispatchers.IO) {
-            kotlin.runCatching {
-                val inputStream = url.openStream()
-                bitmap = BitmapFactory.decodeStream(inputStream)
-            }.getOrNull()
-        }
+        val bitmap = kotlin.runCatching {
+            val inputStream = url.openStream()
+            BitmapFactory.decodeStream(inputStream)
+        }.getOrNull()
         return bitmap
     }
 
     fun getDownloadedImages(
-        jsonImageList: MutableList<JsonImage>, imageData: String?, adapter: DoodleAdapter
+        jsonImageList: MutableList<JsonImage>, imageData: String, adapter: DoodleAdapter
     ) {
-        val scope = CoroutineScope(Dispatchers.Main)
+        val scope = CoroutineScope(Dispatchers.IO)
         val jsonObject = JSONObject(imageData)
         val jsonList = jsonObject.getJSONArray("DownloadedImage")
 
-        runBlocking {
+        for (i in 0 until jsonList.length()) {
+
             scope.launch {
-                for (i in 0 until jsonList.length()) {
-                    val imageObject = jsonList.getJSONObject(i)
-                    val jsonBitmapImage = loadImage(imageObject.getString("image"))
+                val imageObject = jsonList.getJSONObject(i)
+                val uri = imageObject.getString("image")
+                val jsonBitmapImage: Bitmap? = loadImage(uri)
+
+                scope.launch(Dispatchers.Default) {
                     jsonImageList.add(
                         JsonImage(
                             imageObject.getString("title"),
@@ -43,8 +41,16 @@ class DoodleImageDownloader {
                         )
                     )
                 }
-                adapter.submitList(jsonImageList)
+
+                scope.launch(Dispatchers.Main) {
+                    adapter.submitList(jsonImageList)
+                }
             }
         }
     }
 }
+
+
+
+
+
