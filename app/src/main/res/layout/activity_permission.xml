@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/permission_layout"
     android:visibility="gone"
-    tools:context=".view.MainActivity">
+    tools:context=".view.GalleryActivity">
 
     <ImageView
         android:id="@+id/album_imageview"
