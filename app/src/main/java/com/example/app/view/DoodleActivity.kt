@@ -28,8 +28,6 @@ class DoodleActivity : AppCompatActivity() {
         val doodleViewModel: DoodleViewModel =
             ViewModelProvider(this).get(DoodleViewModel::class.java)
 
-        doodleViewModel.extractDataFromJson(doodleViewAdapter)
-
         doodleViewModel.images.observe(this, Observer<List<JsonImage>> { images ->
             doodleViewAdapter.submitList(images)
         })

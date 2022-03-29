@@ -10,7 +10,7 @@ import com.example.app.data.GalleryImage
 
 class GalleryViewModel(application: Application) : AndroidViewModel(application) {
 
-    var mediaStoreImageList = mutableListOf<GalleryImage>()
+    val mediaStoreImageList = mutableListOf<GalleryImage>()
 
     fun loadImageUri(context: Context) {
         val projection = arrayOf(MediaStore.Images.Media._ID)
