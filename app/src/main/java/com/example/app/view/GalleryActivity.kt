@@ -12,8 +12,6 @@ import com.google.android.material.appbar.MaterialToolbar
 
 class GalleryActivity : AppCompatActivity() {
 
-    private var mediaStoreImageList = mutableListOf<GalleryImage>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -21,13 +19,12 @@ class GalleryActivity : AppCompatActivity() {
 
         val galleryViewModel = ViewModelProvider(this).get(GalleryViewModel::class.java)
         galleryViewModel.loadImageUri(this)
-        mediaStoreImageList = galleryViewModel.mediaStoreImageList
+        val mediaStoreImageList = galleryViewModel.mediaStoreImageList
 
         val myRV = findViewById<RecyclerView>(R.id.recycler_view)
         val myAdapter = GalleryAdapter(mediaStoreImageList)
         myRV.adapter = myAdapter
     }
-
 
     private fun setAppbar() {
         val appBar = findViewById<MaterialToolbar>(R.id.appbar)

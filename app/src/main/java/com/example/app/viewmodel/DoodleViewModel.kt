@@ -20,10 +20,10 @@ class DoodleViewModel(application: Application) : AndroidViewModel(application) 
     private val _images = MutableLiveData<List<JsonImage>>()
     val images: LiveData<List<JsonImage>> get() = _images
 
-    fun extractDataFromJson(adapter: DoodleAdapter) {
+    init {
         val assetLoader = AssetLoader()
         val imageData = assetLoader.getJsonString(getApplication(), "Image.json") ?: ""
-        getDownloadedImages(jsonImageList, imageData, adapter)
+        getDownloadedImages(jsonImageList, imageData)
     }
 
     private fun loadImage(uri: String): Bitmap? {
@@ -36,8 +36,7 @@ class DoodleViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     private fun getDownloadedImages(
-        jsonImageList: MutableList<JsonImage>, imageData: String, adapter: DoodleAdapter
-    ) {
+        jsonImageList: MutableList<JsonImage>, imageData: String) {
         val scope = CoroutineScope(Dispatchers.IO)
         val jsonObject = JSONObject(imageData)
         val jsonList = jsonObject.getJSONArray("DownloadedImage")
