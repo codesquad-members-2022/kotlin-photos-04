@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.app">
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        tools:ignore="ManifestOrder" />
 
     <application
         android:allowBackup="true"
@@ -10,7 +16,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Kotlin_Photo_Album">
         <activity
-            android:name=".MainActivity"
+            android:name=".view.DoodleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".view.PermissionActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,6 +27,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".view.GalleryActivity"
+            android:exported="false" />
+
     </application>
+
 
 </manifest>
